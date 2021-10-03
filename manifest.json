@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-custom-javascript",
-	"name": "Custom JavaScript",
-	"version": "1.0.0",
-	"minAppVersion": "0.9.12",
-	"description": "Run custom JavaScript in Obsidian.",
-	"author": "ryanpcmcquen",
-	"authorUrl": "https://github.com/ryanpcmcquen",
-	"isDesktopOnly": false
+    "id": "obsidian-custom-javascript",
+    "name": "Custom JavaScript",
+    "version": "1.0.0",
+    "minAppVersion": "0.9.12",
+    "description": "Run custom JavaScript in Obsidian.",
+    "author": "ryanpcmcquen",
+    "authorUrl": "https://github.com/ryanpcmcquen",
+    "isDesktopOnly": false
 }

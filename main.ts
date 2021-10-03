@@ -1,127 +1,109 @@
-import {
-	App,
-	Modal,
-	Notice,
-	Plugin,
-	PluginSettingTab,
-	Setting,
-} from "obsidian";
+import { App, Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
 
 interface CustomJavaScriptPluginSettings {
-	code: string;
+    code: string;
 }
 
 const DEFAULT_SETTINGS: CustomJavaScriptPluginSettings = {
-	code: "",
+    code: "",
 };
 
-export default class MyPlugin extends Plugin {
-	settings: CustomJavaScriptPluginSettings;
+export default class CustomJavaScriptPlugin extends Plugin {
+    settings: CustomJavaScriptPluginSettings;
 
-	async onload() {
-		console.log("loading plugin");
+    runCode() {
+        const source = String(this.settings.code);
+        const appendedScript = document.createElement("script");
+        appendedScript.textContent = source;
+        (document.head || document.documentElement).appendChild(appendedScript);
+    }
 
-		await this.loadSettings();
+    async onload() {
+        console.log("Loading Custom JavaScript plugin ...");
 
-		this.addRibbonIcon("dice", "Sample Plugin", () => {
-			new Notice("This is a notice!");
-		});
+        await this.loadSettings();
 
-		this.addStatusBarItem().setText("Status Bar Text");
+        this.addRibbonIcon("dice", "Custom JavaScript Plugin", () => {
+            this.runCode();
+        });
 
-		this.addCommand({
-			id: "open-sample-modal",
-			name: "Open Sample Modal",
-			// callback: () => {
-			// 	console.log('Simple Callback');
-			// },
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
-				if (leaf) {
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-					return true;
-				}
-				return false;
-			},
-		});
+        // this.addStatusBarItem().setText("Status Bar Text");
 
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+        this.addCommand({
+            id: "run-custom-javascript",
+            name: "Run Custom JavaScript",
+            callback: () => {
+                this.runCode();
+            },
+            // checkCallback: (checking: boolean) => {
+            //     let leaf = this.app.workspace.activeLeaf;
+            //     if (leaf) {
+            //         if (!checking) {
+            //         }
+            //         return true;
+            //     }
+            //     return false;
+            // },
+        });
 
-		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			console.log("codemirror", cm);
-		});
+        this.addSettingTab(new CustomJavaScriptSettingTab(this.app, this));
 
-		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-			console.log("click", evt);
-		});
+        // this.registerCodeMirror((cm: CodeMirror.Editor) => {
+        //     console.log("codemirror", cm);
+        // });
 
-		this.registerInterval(
-			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
-		);
-	}
+        // this.registerDomEvent(document, "click", (evt: MouseEvent) => {
+        //     console.log("click", evt);
+        // });
 
-	onunload() {
-		console.log("unloading plugin");
-	}
+        // this.registerInterval(
+        //     window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
+        // );
+    }
 
-	async loadSettings() {
-		this.settings = Object.assign(
-			{},
-			DEFAULT_SETTINGS,
-			await this.loadData()
-		);
-	}
+    onunload() {
+        console.log("Unloading Custom JavaScript plugin ...");
+    }
 
-	async saveSettings() {
-		await this.saveData(this.settings);
-	}
+    async loadSettings() {
+        this.settings = Object.assign(
+            {},
+            DEFAULT_SETTINGS,
+            await this.loadData()
+        );
+    }
+
+    async saveSettings() {
+        await this.saveData(this.settings);
+    }
 }
 
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
+class CustomJavaScriptSettingTab extends PluginSettingTab {
+    plugin: CustomJavaScriptPlugin;
 
-	onOpen() {
-		let { contentEl } = this;
-		contentEl.setText("Woah!");
-	}
+    constructor(app: App, plugin: CustomJavaScriptPlugin) {
+        super(app, plugin);
+        this.plugin = plugin;
+    }
 
-	onClose() {
-		let { contentEl } = this;
-		contentEl.empty();
-	}
-}
+    display(): void {
+        let { containerEl } = this;
 
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+        containerEl.empty();
 
-	constructor(app: App, plugin: MyPlugin) {
-		super(app, plugin);
-		this.plugin = plugin;
-	}
+        containerEl.createEl("h2", { text: "Custom JavaScript Settings." });
 
-	display(): void {
-		let { containerEl } = this;
-
-		containerEl.empty();
-
-		containerEl.createEl("h2", { text: "Settings for my awesome plugin." });
-
-		new Setting(containerEl)
-			.setName("Setting #1")
-			.setDesc("It's a secret")
-			.addText((text) =>
-				text
-					.setPlaceholder("Enter your secret")
-					.setValue("")
-					.onChange(async (value) => {
-						console.log("Secret: " + value);
-						this.plugin.settings.mySetting = value;
-						await this.plugin.saveSettings();
-					})
-			);
-	}
+        new Setting(containerEl)
+            .setName("Code")
+            .setDesc("Custom code to execute on startup or on demand.")
+            .addText((text) =>
+                text
+                    .setPlaceholder("Sweet code here ...")
+                    .setValue("")
+                    .onChange(async (value) => {
+                        this.plugin.settings.code = value;
+                        await this.plugin.saveSettings();
+                    })
+            );
+    }
 }

@@ -1,30 +1,37 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {
+	App,
+	Modal,
+	Notice,
+	Plugin,
+	PluginSettingTab,
+	Setting,
+} from "obsidian";
 
-interface MyPluginSettings {
-	mySetting: string;
+interface CustomJavaScriptPluginSettings {
+	code: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default'
-}
+const DEFAULT_SETTINGS: CustomJavaScriptPluginSettings = {
+	code: "",
+};
 
 export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+	settings: CustomJavaScriptPluginSettings;
 
 	async onload() {
-		console.log('loading plugin');
+		console.log("loading plugin");
 
 		await this.loadSettings();
 
-		this.addRibbonIcon('dice', 'Sample Plugin', () => {
-			new Notice('This is a notice!');
+		this.addRibbonIcon("dice", "Sample Plugin", () => {
+			new Notice("This is a notice!");
 		});
 
-		this.addStatusBarItem().setText('Status Bar Text');
+		this.addStatusBarItem().setText("Status Bar Text");
 
 		this.addCommand({
-			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
+			id: "open-sample-modal",
+			name: "Open Sample Modal",
 			// callback: () => {
 			// 	console.log('Simple Callback');
 			// },
@@ -37,28 +44,34 @@ export default class MyPlugin extends Plugin {
 					return true;
 				}
 				return false;
-			}
+			},
 		});
 
 		this.addSettingTab(new SampleSettingTab(this.app, this));
 
 		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			console.log('codemirror', cm);
+			console.log("codemirror", cm);
 		});
 
-		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
+		this.registerDomEvent(document, "click", (evt: MouseEvent) => {
+			console.log("click", evt);
 		});
 
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+		this.registerInterval(
+			window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
+		);
 	}
 
 	onunload() {
-		console.log('unloading plugin');
+		console.log("unloading plugin");
 	}
 
 	async loadSettings() {
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
+		this.settings = Object.assign(
+			{},
+			DEFAULT_SETTINGS,
+			await this.loadData()
+		);
 	}
 
 	async saveSettings() {
@@ -72,12 +85,12 @@ class SampleModal extends Modal {
 	}
 
 	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
+		let { contentEl } = this;
+		contentEl.setText("Woah!");
 	}
 
 	onClose() {
-		let {contentEl} = this;
+		let { contentEl } = this;
 		contentEl.empty();
 	}
 }
@@ -91,22 +104,24 @@ class SampleSettingTab extends PluginSettingTab {
 	}
 
 	display(): void {
-		let {containerEl} = this;
+		let { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		containerEl.createEl("h2", { text: "Settings for my awesome plugin." });
 
 		new Setting(containerEl)
-			.setName('Setting #1')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue('')
-				.onChange(async (value) => {
-					console.log('Secret: ' + value);
-					this.plugin.settings.mySetting = value;
-					await this.plugin.saveSettings();
-				}));
+			.setName("Setting #1")
+			.setDesc("It's a secret")
+			.addText((text) =>
+				text
+					.setPlaceholder("Enter your secret")
+					.setValue("")
+					.onChange(async (value) => {
+						console.log("Secret: " + value);
+						this.plugin.settings.mySetting = value;
+						await this.plugin.saveSettings();
+					})
+			);
 	}
 }

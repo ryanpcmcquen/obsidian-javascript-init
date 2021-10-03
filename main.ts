@@ -11,8 +11,8 @@ const DEFAULT_SETTINGS: CustomJavaScriptPluginSettings = {
 export default class CustomJavaScriptPlugin extends Plugin {
     settings: CustomJavaScriptPluginSettings;
 
-    runCode() {
-        const source = String(this.settings.code);
+    runCode(code = this.settings.code) {
+        const source = String(code);
         const appendedScript = document.createElement("script");
         appendedScript.textContent = source;
         (document.head || document.documentElement).appendChild(appendedScript);
@@ -27,38 +27,21 @@ export default class CustomJavaScriptPlugin extends Plugin {
             this.runCode();
         });
 
-        // this.addStatusBarItem().setText("Status Bar Text");
-
         this.addCommand({
             id: "run-custom-javascript",
             name: "Run Custom JavaScript",
             callback: () => {
                 this.runCode();
             },
-            // checkCallback: (checking: boolean) => {
-            //     let leaf = this.app.workspace.activeLeaf;
-            //     if (leaf) {
-            //         if (!checking) {
-            //         }
-            //         return true;
-            //     }
-            //     return false;
-            // },
         });
 
         this.addSettingTab(new CustomJavaScriptSettingTab(this.app, this));
 
-        // this.registerCodeMirror((cm: CodeMirror.Editor) => {
-        //     console.log("codemirror", cm);
-        // });
-
-        // this.registerDomEvent(document, "click", (evt: MouseEvent) => {
-        //     console.log("click", evt);
-        // });
-
-        // this.registerInterval(
-        //     window.setInterval(() => console.log("setInterval"), 5 * 60 * 1000)
-        // );
+        console.log(this.settings);
+        this
+            .runCode
+            // `document.addEventListener("DOMContentLoaded", () => { ${this.settings.code}; });`
+            ();
     }
 
     onunload() {
@@ -96,14 +79,20 @@ class CustomJavaScriptSettingTab extends PluginSettingTab {
         new Setting(containerEl)
             .setName("Code")
             .setDesc("Custom code to execute on startup or on demand.")
-            .addText((text) =>
-                text
+            .addTextArea((text) => {
+                const resultant = text
+
                     .setPlaceholder("Sweet code here ...")
-                    .setValue("")
+                    .setValue(this.plugin.settings.code || "")
                     .onChange(async (value) => {
                         this.plugin.settings.code = value;
                         await this.plugin.saveSettings();
-                    })
-            );
+                    });
+
+                resultant.inputEl.style.fontFamily = "monospace";
+                resultant.inputEl.style.width = "100%";
+
+                return resultant;
+            });
     }
 }

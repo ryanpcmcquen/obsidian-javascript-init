@@ -1,8 +1,6 @@
 import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
 
-type JavaScriptInitPluginSettings = {
-    code: string;
-};
+type JavaScriptInitPluginSettings = { code: string };
 
 const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
     code: "",
@@ -11,8 +9,8 @@ const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
 export default class JavaScriptInitPlugin extends Plugin {
     settings: JavaScriptInitPluginSettings;
 
-    runCode(code = this.settings.code) {
-        const source = String(code);
+    runCode(code = "") {
+        const source = String(code || this.settings.code);
         const appendedScript = document.createElement("script");
         appendedScript.textContent = source;
         (document.head || document.documentElement).appendChild(appendedScript);
@@ -37,11 +35,7 @@ export default class JavaScriptInitPlugin extends Plugin {
 
         this.addSettingTab(new JavaScriptInitSettingTab(this.app, this));
 
-        console.log(this.settings);
-        this
-            .runCode
-            // `document.addEventListener("DOMContentLoaded", () => { ${this.settings.code}; });`
-            ();
+        this.app.workspace.onLayoutReady(() => this.runCode());
     }
 
     onunload() {

@@ -1,8 +1,8 @@
-import { App, Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
+import { App, Plugin, PluginSettingTab, Setting } from "obsidian";
 
-interface JavaScriptInitPluginSettings {
+type JavaScriptInitPluginSettings = {
     code: string;
-}
+};
 
 const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
     code: "",
@@ -19,17 +19,17 @@ export default class JavaScriptInitPlugin extends Plugin {
     }
 
     async onload() {
-        console.log("Loading Custom JavaScript plugin ...");
+        console.log("Loading JavaScript Init plugin ...");
 
         await this.loadSettings();
 
-        this.addRibbonIcon("dice", "Custom JavaScript Plugin", () => {
+        this.addRibbonIcon("dice", "Run Init JavaScript", () => {
             this.runCode();
         });
 
         this.addCommand({
-            id: "run-custom-javascript",
-            name: "Run Custom JavaScript",
+            id: "run-init-javascript",
+            name: "Run Init JavaScript",
             callback: () => {
                 this.runCode();
             },
@@ -45,7 +45,7 @@ export default class JavaScriptInitPlugin extends Plugin {
     }
 
     onunload() {
-        console.log("Unloading Custom JavaScript plugin ...");
+        console.log("Unloading JavaScript Init plugin ...");
     }
 
     async loadSettings() {
@@ -74,7 +74,7 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        containerEl.createEl("h2", { text: "Custom JavaScript Settings." });
+        containerEl.createEl("h2", { text: "JavaScript Init Settings." });
 
         new Setting(containerEl)
             .setName("Code")

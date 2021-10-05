@@ -10,6 +10,7 @@
     "keywords": [],
     "author": "",
     "license": "MPL-2.0",
+    "repository": "https://github.com/ryanpcmcquen/obsidian-javascript-init",
     "devDependencies": {
         "@rollup/plugin-commonjs": "^18.0.0",
         "@rollup/plugin-node-resolve": "^11.2.1",

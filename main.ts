@@ -21,7 +21,7 @@ export default class JavaScriptInitPlugin extends Plugin {
 
         await this.loadSettings();
 
-        this.addRibbonIcon("dice", "Run Init JavaScript", () => {
+        this.addRibbonIcon("any-key", "Run Init JavaScript", () => {
             this.runCode();
         });
 
@@ -68,7 +68,7 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
 
         containerEl.empty();
 
-        containerEl.createEl("h2", { text: "JavaScript Init Settings." });
+        containerEl.createEl("h2", { text: "JavaScript Init Settings" });
 
         new Setting(containerEl)
             .setName("Code")
@@ -83,8 +83,17 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
                         await this.plugin.saveSettings();
                     });
 
-                resultant.inputEl.style.fontFamily = "monospace";
-                resultant.inputEl.style.width = "100%";
+                const textArea = resultant.inputEl;
+                const textAreaWrapper =
+                    textArea.parentNode as unknown as HTMLDivElement;
+
+                textAreaWrapper.style.width = "100%";
+                textAreaWrapper.style.display = "flex";
+                textAreaWrapper.style.flexDirection = "row";
+
+                textArea.style.fontFamily = "monospace";
+                textArea.style.fontSize = "80%";
+                textArea.style.flex = "1";
 
                 return resultant;
             });

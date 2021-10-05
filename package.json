@@ -1,7 +1,7 @@
 {
-    "name": "obsidian-custom-javascript",
+    "name": "obsidian-javascript-init",
     "version": "1.0.0",
-    "description": "Run custom JavaScript in Obsidian.",
+    "description": "Run JavaScript when Obsidian loads, or any other time.",
     "main": "main.js",
     "scripts": {
         "dev": "rollup --config rollup.config.js -w",

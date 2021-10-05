@@ -1,15 +1,15 @@
 import { App, Notice, Plugin, PluginSettingTab, Setting } from "obsidian";
 
-interface CustomJavaScriptPluginSettings {
+interface JavaScriptInitPluginSettings {
     code: string;
 }
 
-const DEFAULT_SETTINGS: CustomJavaScriptPluginSettings = {
+const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
     code: "",
 };
 
-export default class CustomJavaScriptPlugin extends Plugin {
-    settings: CustomJavaScriptPluginSettings;
+export default class JavaScriptInitPlugin extends Plugin {
+    settings: JavaScriptInitPluginSettings;
 
     runCode(code = this.settings.code) {
         const source = String(code);
@@ -35,7 +35,7 @@ export default class CustomJavaScriptPlugin extends Plugin {
             },
         });
 
-        this.addSettingTab(new CustomJavaScriptSettingTab(this.app, this));
+        this.addSettingTab(new JavaScriptInitSettingTab(this.app, this));
 
         console.log(this.settings);
         this
@@ -61,10 +61,10 @@ export default class CustomJavaScriptPlugin extends Plugin {
     }
 }
 
-class CustomJavaScriptSettingTab extends PluginSettingTab {
-    plugin: CustomJavaScriptPlugin;
+class JavaScriptInitSettingTab extends PluginSettingTab {
+    plugin: JavaScriptInitPlugin;
 
-    constructor(app: App, plugin: CustomJavaScriptPlugin) {
+    constructor(app: App, plugin: JavaScriptInitPlugin) {
         super(app, plugin);
         this.plugin = plugin;
     }

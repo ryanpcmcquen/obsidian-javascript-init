@@ -84,16 +84,18 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
                     });
 
                 const textArea = resultant.inputEl;
-                const textAreaWrapper =
-                    textArea.parentNode as unknown as HTMLDivElement;
+                const settingsWrapper = textArea.parentNode
+                    .parentNode as unknown as HTMLDivElement;
 
-                textAreaWrapper.style.width = "100%";
-                textAreaWrapper.style.display = "flex";
-                textAreaWrapper.style.flexDirection = "row";
+                settingsWrapper.style.display = "grid";
+                settingsWrapper.style.gridTemplateRows = "2fr";
 
                 textArea.style.fontFamily = "monospace";
                 textArea.style.fontSize = "80%";
-                textArea.style.flex = "1";
+
+                textArea.style.marginTop = "1rem";
+                textArea.style.height = "20rem";
+                textArea.style.width = "100%";
 
                 return resultant;
             });

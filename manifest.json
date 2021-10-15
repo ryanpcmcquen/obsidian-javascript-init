@@ -1,7 +1,7 @@
 {
     "id": "obsidian-javascript-init",
     "name": "JavaScript Init",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "minAppVersion": "0.9.12",
     "description": "Run JavaScript when Obsidian loads, or any other time.",
     "author": "ryanpcmcquen",

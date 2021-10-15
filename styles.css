@@ -1,0 +1,14 @@
+.javascript-init-settings-panel {
+    display: grid;
+    grid-template-rows: 2fr;
+}
+
+.javascript-init-settings-panel-textarea {
+    font-family: monospace;
+    font-size: 80%;
+
+    margin-top: 1rem;
+
+    height: 20rem;
+    width: 100%;
+}

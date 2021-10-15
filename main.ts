@@ -9,8 +9,8 @@ const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
 export default class JavaScriptInitPlugin extends Plugin {
     settings: JavaScriptInitPluginSettings;
 
-    runCode(code = "") {
-        const source = String(code || this.settings.code);
+    runCode() {
+        const source = String(this.settings.code);
         const appendedScript = document.createElement("script");
         appendedScript.textContent = source;
         (document.head || document.documentElement).appendChild(appendedScript);
@@ -35,7 +35,9 @@ export default class JavaScriptInitPlugin extends Plugin {
 
         this.addSettingTab(new JavaScriptInitSettingTab(this.app, this));
 
-        this.app.workspace.onLayoutReady(() => this.runCode());
+        this.app.workspace.onLayoutReady(() => {
+            this.runCode();
+        });
     }
 
     onunload() {
@@ -84,18 +86,11 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
                     });
 
                 const textArea = resultant.inputEl;
-                const settingsWrapper = textArea.parentNode
-                    .parentNode as unknown as HTMLDivElement;
+                const settingsWrapper = (textArea.parentNode
+                    .parentNode as unknown) as HTMLDivElement;
 
-                settingsWrapper.style.display = "grid";
-                settingsWrapper.style.gridTemplateRows = "2fr";
-
-                textArea.style.fontFamily = "monospace";
-                textArea.style.fontSize = "80%";
-
-                textArea.style.marginTop = "1rem";
-                textArea.style.height = "20rem";
-                textArea.style.width = "100%";
+                settingsWrapper.addClass("javascript-init-settings-panel");
+                textArea.addClass("javascript-init-settings-panel-textarea");
 
                 return resultant;
             });

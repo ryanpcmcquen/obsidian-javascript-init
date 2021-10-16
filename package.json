@@ -1,6 +1,6 @@
 {
     "name": "obsidian-javascript-init",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Run JavaScript when Obsidian loads, or any other time.",
     "main": "main.js",
     "scripts": {

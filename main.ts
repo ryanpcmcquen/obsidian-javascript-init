@@ -8,12 +8,15 @@ const DEFAULT_SETTINGS: JavaScriptInitPluginSettings = {
 
 export default class JavaScriptInitPlugin extends Plugin {
     settings: JavaScriptInitPluginSettings;
+    appendedScript: HTMLScriptElement;
 
     runCode() {
         const source = String(this.settings.code);
-        const appendedScript = document.createElement("script");
-        appendedScript.textContent = source;
-        (document.head || document.documentElement).appendChild(appendedScript);
+        this.appendedScript = document.createElement("script");
+        this.appendedScript.textContent = source;
+        (document.head || document.documentElement).appendChild(
+            this.appendedScript
+        );
     }
 
     async onload() {
@@ -42,6 +45,7 @@ export default class JavaScriptInitPlugin extends Plugin {
 
     onunload() {
         console.log("Unloading JavaScript Init plugin ...");
+        this.appendedScript.remove();
     }
 
     async loadSettings() {
@@ -86,8 +90,8 @@ class JavaScriptInitSettingTab extends PluginSettingTab {
                     });
 
                 const textArea = resultant.inputEl;
-                const settingsWrapper = (textArea.parentNode
-                    .parentNode as unknown) as HTMLDivElement;
+                const settingsWrapper = textArea.parentNode
+                    .parentNode as unknown as HTMLDivElement;
 
                 settingsWrapper.addClass("javascript-init-settings-panel");
                 textArea.addClass("javascript-init-settings-panel-textarea");
